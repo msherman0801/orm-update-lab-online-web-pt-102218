@@ -5,7 +5,7 @@ class Student
   attr_accessor :id, :name, :grade
   @@all = []
 
-  def initialize (name, grade, id: nil)
+  def initialize (name, grade, id = nil)
     @id = id unless id == nil
     @name = name
     @grade = grade
@@ -51,14 +51,16 @@ class Student
   end
 
   def self.new_from_db(row)
-    self.create(row[1],row[2])
+    out = self.new(row[1],row[2],row[0])
+    out
   end
 
   def self.find_by_name(name)
     sql = "SELECT * FROM students WHERE name = ?"
-    row = DB[:conn].execute(sql, name)[0]
-    binding.pry
-    self.new_from_db(row)
+    out = DB[:conn].execute(sql, name)[0]
+    # row.each do |i|
+      self.new_from_db(out)
+    #end
   end
 
 end
